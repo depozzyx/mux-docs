@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Docs</title>
+    </head>
+    <body class="body">
+        <header class="header">
+            <h1 class="header__title">
+                Documentation for app
+                <a href="{{.Host}}" target="_blank"> {{.Name}} </a>
+            </h1>
+            <small class="header__subtitle">
+                powered by
+                <a href="github.com/depozzyx/go-mux-docs" target="_blank">
+                    github.com/depozzyx/go-mux-docs
+                </a>
+            </small>
+        </header>
+        <main class="main">
+            <ul class="routes">
+                {{ range .AllRoutes }}
+                <li class="routes__item">
+                    <div class="routes__item_left">
+                        {{ range .Methods }}
+                        <b class="routes__method routes__method--{{.}}"
+                            >{{ . }}</b
+                        >
+                        {{ end }}
+                        <a href="{{ .URL }}" target="_blank"> {{ .Path }} </a>
+                        <button
+                            class="routes__copy_button"
+                            onclick="copy(event, '{{ .URL }}')"
+                        >
+                            📋
+                        </button>
+                    </div>
+                    <div class="routes__item_right">
+                        <span class="">{{ .Name }} </span>
+                    </div>
+                </li>
+                {{ end }}
+            </ul>
+        </main>
+    </body>
+    <script>
+        const copy = (e, text) => {
+            if (!navigator.clipboard) {
+                alert(
+                    "unable to copy, maybe you shoud switch to localhost or https connection?"
+                );
+                e.target.innerHTML = "📋 not copied(";
+            } else {
+                navigator.clipboard.writeText(text);
+                e.target.innerHTML = "📋 copied!";
+            }
+            setTimeout(() => (e.target.innerHTML = "📋"), 3000);
+        };
+    </script>
+    <style>
+        /* https://coolors.co/011627-fdfffc-2ec4b6-e71d36-ff9f1c */
+        a {
+            color: inherit;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+        a:hover {
+            opacity: 1;
+            text-decoration: underline;
+        }
+
+        .body {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, Helvetica, sans-serif;
+            gap: 2rem;
+            color: #011627;
+        }
+        .body > * {
+            width: min(100%, 800px);
+        }
+
+        .header {
+            margin-top: 4rem;
+        }
+        .header__title {
+            margin: 0;
+        }
+
+        .routes {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            list-style: none;
+            padding: 0;
+        }
+        .routes__item {
+            padding: 1rem;
+            background-color: #fafcf9;
+            border-radius: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        .routes__item_left {
+            display: inline-block;
+        }
+        .routes__item_right {
+            max-width: 50%;
+            display: flex;
+            align-items: center;
+        }
+        .routes__copy_button {
+            background-color: rgba(0, 0, 0, 0);
+            border: none;
+        }
+        .routes__copy_button:hover {
+            cursor: pointer;
+            cursor: copy;
+        }
+        .routes__method {
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            /*https://coolors.co/2d7dd2-97cc04-eeb902-f45d01-474647*/
+            /*https://coolors.co/7a5c61-f7accf-e8f0ff-6874e8-392759*/
+            color: white;
+            margin-right: 0.5rem;
+            background-color: #5b4b49;
+            margin-bottom: 0.5rem;
+            line-height: calc(1.5rem + 1em);
+        }
+        .routes__method--GET {
+            background-color: #2ec4b6;
+        }
+        .routes__method--POST,
+        .routes__method--PUT {
+            background-color: #5998c5;
+        }
+        .routes__method--DELETE {
+            background-color: #e71d36;
+        }
+        .routes__method--PATCH {
+            background-color: #ff9f1c;
+        }
+    </style>
+</html>
