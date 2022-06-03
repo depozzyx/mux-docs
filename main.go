@@ -25,7 +25,7 @@ type RouteInfo struct {
 var docsData DocsEndpoint
 
 func docsEndpoint(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("docs/template.html")
+	tmpl, err := template.ParseFiles("template.html")
 	if err != nil {
 		http.Error(w, "can't get docs template", 500)
 		return
