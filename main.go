@@ -1,6 +1,7 @@
 package docs
 
 import (
+	_ "embed"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,6 +9,12 @@ import (
 	"text/template"
 
 	"github.com/gorilla/mux"
+)
+
+var (
+	//go:embed template.html
+	docsTemplate string
+	docsData     DocsEndpoint
 )
 
 type DocsEndpoint struct {
@@ -20,22 +27,6 @@ type RouteInfo struct {
 	URL     string
 	Methods []string
 	Name    string
-}
-
-var docsData DocsEndpoint
-
-func docsEndpoint(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles("template.html")
-	if err != nil {
-		http.Error(w, "can't get docs template", 500)
-		return
-	}
-
-	err = tmpl.Execute(w, docsData)
-	if err != nil {
-		http.Error(w, fmt.Sprintf("can't get execute docs template with data %+v", docsData), 500)
-		return
-	}
 }
 
 func Middleware(router *mux.Router, appHost string, docsPathOptional ...string) func(http.Handler) http.Handler {
@@ -68,6 +59,20 @@ func Middleware(router *mux.Router, appHost string, docsPathOptional ...string) 
 	// log.Printf("[Docs] routes inited %+v\n", docsData)
 	return func(h http.Handler) http.Handler {
 		return h
+	}
+}
+
+func docsEndpoint(w http.ResponseWriter, r *http.Request) {
+	tmpl, err := template.New("generators").Parse(docsTemplate)
+	if err != nil {
+		http.Error(w, "can't get docs template", 500)
+		return
+	}
+
+	err = tmpl.Execute(w, docsData)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("can't get execute docs template with data %+v", docsData), 500)
+		return
 	}
 }
 
