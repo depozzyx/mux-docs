@@ -2,6 +2,8 @@
 
 Automatic documentation for API routes written in Go using gorilla/mux package
 
+![Example of generated page](example/example.png)
+
 Usage:
 
 1.  Navigate to a Go application, that uses gorilla/mux
@@ -27,5 +29,3 @@ Usage:
 5.  Run your project! Docs endpoint will be displayed in logs
 
 Full test server code in [example/main.go](example/main.go)
-
-![Example of generated page](example/example.png)
